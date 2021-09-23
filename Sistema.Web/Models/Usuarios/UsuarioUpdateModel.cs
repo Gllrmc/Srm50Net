@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema.Entidades.Usuarios
+namespace Sistema.Web.Models.Usuarios
 {
-    public class Usuario
+    public class UsuarioUpdateModel
     {
-        [Key]
+        [Required]
         public int id { get; set; }
         [Required]
-        [ForeignKey("rol")]
         public int rolid { get; set; }
         [Required]
+        [EmailAddress]
         public string email { get; set; }
         [Required]
         public string nombre { get; set; }
@@ -25,24 +23,16 @@ namespace Sistema.Entidades.Usuarios
         public string iniciales { get; set; }
         public string telefono { get; set; }
         [Required]
-        public byte[] password_hash { get; set; }
-        [Required]
-        public byte[] password_salt { get; set; }
+        public string password { get; set; }
         public bool pxch { get; set; }
         public int lineaspag { get; set; }
+        public bool act_password { get; set; }
         public string colfondo { get; set; }
         public string coltexto { get; set; }
         public string imgusuario { get; set; }
         [Required]
-        public int iduseralta { get; set; }
-        [Required]
-        public DateTime fecalta { get; set; }
-        [Required]
         public int iduserumod { get; set; }
         [Required]
         public DateTime fecumod { get; set; }
-        [Required]
-        public bool activo { get; set; }
-        public Rol rol { get; set; }
     }
 }
