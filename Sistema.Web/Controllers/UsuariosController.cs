@@ -31,7 +31,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Listar
-        //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> Listar()
         {
@@ -202,7 +202,7 @@ namespace Sistema.Web.Controllers
         }
 
         // POST: api/Usuarios/Crear
-        //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Crear([FromBody] UsuarioCreateModel model)
         {
