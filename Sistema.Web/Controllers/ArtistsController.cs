@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using Sistema.Web.Models.Artists;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
+    //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
     public class ArtistsController : ControllerBase
@@ -28,8 +29,9 @@ namespace Sistema.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IEnumerable<ArtistViewModel>> Listar()
         {
-            var Artist = await _context.Artists.ToListAsync();
-
+            var Artist = await _context.Artists
+                .Include(m => m.mainroleartists)
+                .ToListAsync();
             return Artist.Select(r => new ArtistViewModel
             {
                 id = r.id,
@@ -41,7 +43,7 @@ namespace Sistema.Web.Controllers
                 email = r.email,
                 phone = r.phone,
                 mobile = r.mobile,
-                imgcliente = r.imgcliente,
+                imgartist = r.imgartist,
                 proveedorid = r.proveedorid,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
@@ -51,6 +53,7 @@ namespace Sistema.Web.Controllers
             });
 
         }
+
 
         // GET: api/Artists/Select
         [HttpGet("[action]")]
@@ -91,7 +94,7 @@ namespace Sistema.Web.Controllers
                 email = artist.email,
                 phone = artist.phone,
                 mobile = artist.mobile,
-                imgcliente = artist.imgcliente,
+                imgartist = artist.imgartist,
                 proveedorid = artist.proveedorid,
                 iduseralta = artist.iduseralta,
                 fecalta = artist.fecalta,
@@ -131,7 +134,7 @@ namespace Sistema.Web.Controllers
             artist.email = model.email;
             artist.phone = model.phone;
             artist.mobile = model.mobile;
-            artist.imgcliente = model.imgcliente;
+            artist.imgartist = model.imgartist;
             artist.proveedorid = model.proveedorid;
             artist.iduserumod = model.iduserumod;
             artist.fecumod = fechaHora;
@@ -169,7 +172,7 @@ namespace Sistema.Web.Controllers
                 email = model.email,
                 phone = model.phone,
                 mobile = model.mobile,
-                imgcliente = model.imgcliente,
+                imgartist = model.imgartist,
                 proveedorid = model.proveedorid,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,

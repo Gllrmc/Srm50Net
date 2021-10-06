@@ -21,7 +21,7 @@ namespace Sistema.Datos
         public DbSet<Selection> Selections { get; set; }
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Mainroleartist> Mainroleartists { get; set; }
-        public DbSet<Mainroleartist> Skillartists { get; set; }
+        public DbSet<Skillartist> Skillartists { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Note> Notes { get; set; }

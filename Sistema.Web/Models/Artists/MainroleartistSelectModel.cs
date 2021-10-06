@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Models.Artists
 {
-    public class SkillSelectModel
+    public class MainroleartistSelectModel
     {
         public int id { get; set; }
-        public string skill { get; set; }
-        public bool ismainrole { get; set; }
+        public int artistid { get; set; }
+        public int skillid { get; set; }
     }
 }

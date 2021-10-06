@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Sistema.Web.Models.Artists
         public string email { get; set; }
         public string phone { get; set; }
         public string mobile { get; set; }
-        public string imgcliente { get; set; }
+        public string imgartist { get; set; }
         public int? proveedorid { get; set; }
         public int iduseralta { get; set; }
         public DateTime fecalta { get; set; }

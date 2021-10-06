@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,26 +14,26 @@ namespace Sistema.Web.Controllers
     //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
-    public class SkillsController : ControllerBase
+    public class MainroleartistsController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public SkillsController(DbContextSistema context)
+        public MainroleartistsController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Skills/Listar
+        // GET: api/Mainroleartists/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillViewModel>> Listar()
+        public async Task<IEnumerable<MainroleartistViewModel>> Listar()
         {
-            var Skill = await _context.Skills.ToListAsync();
+            var Mainroleartist = await _context.Mainroleartists.ToListAsync();
 
-            return Skill.Select(r => new SkillViewModel
+            return Mainroleartist.Select(r => new MainroleartistViewModel
             {
                 id = r.id,
-                skill = r.skill,
-                ismainrole = r.ismainrole,
+                artistid = r.artistid,
+                skillid = r.skillid,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -44,64 +43,52 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Skills/Select
+        // GET: api/Mainroleartists/Select
         [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillSelectModel>> Select()
+        public async Task<IEnumerable<MainroleartistSelectModel>> Select()
         {
-            var skill = await _context.Skills.Where(r => r.activo == true).OrderBy(r => r.skill).ToListAsync();
-
-            return skill.Select(r => new SkillSelectModel
-            {
-                id = r.id,
-                skill = r.skill,
-                ismainrole = r.ismainrole
-            });
-        }
-
-        // GET: api/Skills/Selectmainrole
-        [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillSelectModel>> Selectmainrole()
-        {
-            var skill = await _context.Skills
-                .Where(r => r.activo == true && r.ismainrole == true )
-                .OrderBy(r => r.skill)
+            var mainroleartist = await _context.Mainroleartists
+                .Include(s => s.skill)
+                .Where(r => r.activo == true)
+                .OrderByDescending(r => r.skill.skill)
                 .ToListAsync();
 
-            return skill.Select(r => new SkillSelectModel
+            return mainroleartist.Select(r => new MainroleartistSelectModel
             {
                 id = r.id,
-                skill = r.skill,
+                artistid = r.artistid,
+                skillid = r.skillid
             });
         }
 
-        // GET: api/Skills/Mostrar/1
+        // GET: api/Mainroleartists/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var skill = await _context.Skills.FindAsync(id);
+            var mainroleartist = await _context.Mainroleartists.FindAsync(id);
 
-            if (skill == null)
+            if (mainroleartist == null)
             {
                 return NotFound();
             }
 
-            return Ok(new SkillViewModel
+            return Ok(new MainroleartistViewModel
             {
-                id = skill.id,
-                skill = skill.skill,
-                ismainrole = skill.ismainrole,
-                iduseralta = skill.iduseralta,
-                fecalta = skill.fecalta,
-                iduserumod = skill.iduserumod,
-                fecumod = skill.fecumod,
-                activo = skill.activo
+                id = mainroleartist.id,
+                skillid = mainroleartist.skillid,
+                artistid = mainroleartist.artistid,
+                iduseralta = mainroleartist.iduseralta,
+                fecalta = mainroleartist.fecalta,
+                iduserumod = mainroleartist.iduserumod,
+                fecumod = mainroleartist.fecumod,
+                activo = mainroleartist.activo
             });
         }
 
-        // PUT: api/Skills/Actualizar
+        // PUT: api/Mainroleartists/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] SkillUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] MainroleartistUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -114,17 +101,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var skill = await _context.Skills.FirstOrDefaultAsync(c => c.id == model.id);
+            var mainroleartist = await _context.Mainroleartists.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (skill == null)
+            if (mainroleartist == null)
             {
                 return NotFound();
             }
 
-            skill.skill = model.skill;
-            skill.ismainrole = model.ismainrole;
-            skill.iduserumod = model.iduserumod;
-            skill.fecumod = fechaHora;
+            mainroleartist.skillid = model.skillid;
+            mainroleartist.artistid = model.artistid;
+            mainroleartist.iduserumod = model.iduserumod;
+            mainroleartist.fecumod = fechaHora;
 
             try
             {
@@ -139,9 +126,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Skills/Crear
+        // POST: api/Mainroleartists/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] SkillCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] MainroleartistCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -149,10 +136,10 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Skill skill = new Skill
+            Mainroleartist mainroleartist = new Mainroleartist
             {
-                skill = model.skill,
-                ismainrole = model.ismainrole,
+                skillid = model.skillid,
+                artistid = model.artistid,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -160,7 +147,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Skills.Add(skill);
+            _context.Mainroleartists.Add(mainroleartist);
             try
             {
                 await _context.SaveChangesAsync();
@@ -173,7 +160,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // DELETE: api/Skills/Eliminar/1
+        // DELETE: api/Mainroleartists/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -182,13 +169,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var skill = await _context.Skills.FindAsync(id);
-            if (skill == null)
+            var mainroleartist = await _context.Mainroleartists.FindAsync(id);
+            if (mainroleartist == null)
             {
                 return NotFound();
             }
 
-            _context.Skills.Remove(skill);
+            _context.Mainroleartists.Remove(mainroleartist);
             try
             {
                 await _context.SaveChangesAsync();
@@ -198,10 +185,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(skill);
+            return Ok(mainroleartist);
         }
 
-        // PUT: api/Skills/Desactivar/1
+        // PUT: api/Mainroleartists/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -211,14 +198,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skill = await _context.Skills.FirstOrDefaultAsync(c => c.id == id);
+            var mainroleartist = await _context.Mainroleartists.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skill == null)
+            if (mainroleartist == null)
             {
                 return NotFound();
             }
 
-            skill.activo = false;
+            mainroleartist.activo = false;
 
             try
             {
@@ -233,7 +220,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Skills/Activar/1
+        // PUT: api/Mainroleartists/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -243,14 +230,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skill = await _context.Skills.FirstOrDefaultAsync(c => c.id == id);
+            var mainroleartist = await _context.Mainroleartists.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skill == null)
+            if (mainroleartist == null)
             {
                 return NotFound();
             }
 
-            skill.activo = true;
+            mainroleartist.activo = true;
 
             try
             {
@@ -265,9 +252,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool SkillExists(int id)
+        private bool MainroleartistExists(int id)
         {
-            return _context.Skills.Any(e => e.id == id);
+            return _context.Mainroleartists.Any(e => e.id == id);
         }
     }
 }

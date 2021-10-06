@@ -17,7 +17,7 @@ namespace Sistema.Web.Models.Artists
         public string email { get; set; }
         public string phone { get; set; }
         public string mobile { get; set; }
-        public string imgcliente { get; set; }
+        public string imgartist { get; set; }
         public int? proveedorid { get; set; }
         [Required]
         public int iduseralta { get; set; }
