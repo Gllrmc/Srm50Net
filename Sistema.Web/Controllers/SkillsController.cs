@@ -170,7 +170,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(skill);
         }
 
         // DELETE: api/Skills/Eliminar/1

@@ -157,7 +157,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(mainroleartist);
         }
 
         // DELETE: api/Mainroleartists/Eliminar/1

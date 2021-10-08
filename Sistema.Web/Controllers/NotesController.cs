@@ -141,7 +141,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(note);
         }
 
         // DELETE: api/Notes/Eliminar/1

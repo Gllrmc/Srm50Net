@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,26 +15,29 @@ namespace Sistema.Web.Controllers
     //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
-    public class SkillartistsController : ControllerBase
+    public class RatingsController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public SkillartistsController(DbContextSistema context)
+        public RatingsController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Skillartists/Listar
+        // GET: api/Ratings/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillartistViewModel>> Listar()
+        public async Task<IEnumerable<RatingViewModel>> Listar()
         {
-            var Skillartist = await _context.Skillartists.ToListAsync();
+            var Rating = await _context.Ratings
+                .OrderBy(o => o.artist).ThenByDescending(o => o.fecumod)
+                .ToListAsync();
 
-            return Skillartist.Select(r => new SkillartistViewModel
+            return Rating.Select(r => new RatingViewModel
             {
                 id = r.id,
                 artistid = r.artistid,
-                skillid = r.skillid,
+                projectname = r.projectname,
+                score = r.score,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -43,52 +47,35 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Skillartists/Select
-        [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillartistSelectModel>> Select()
-        {
-            var skillartist = await _context.Skillartists
-                .Include(s => s.skill)
-                .Where(r => r.activo == true)
-                .OrderByDescending(r => r.skill.skill)
-                .ToListAsync();
-
-            return skillartist.Select(r => new SkillartistSelectModel
-            {
-                id = r.id,
-                artistid = r.artistid,
-                skillid = r.skillid
-            });
-        }
-
-        // GET: api/Skillartists/Mostrar/1
+        // GET: api/Ratings/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var skillartist = await _context.Skillartists.FindAsync(id);
+            var rating = await _context.Ratings.FindAsync(id);
 
-            if (skillartist == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            return Ok(new SkillartistViewModel
+            return Ok(new RatingViewModel
             {
-                id = skillartist.id,
-                skillid = skillartist.skillid,
-                artistid = skillartist.artistid,
-                iduseralta = skillartist.iduseralta,
-                fecalta = skillartist.fecalta,
-                iduserumod = skillartist.iduserumod,
-                fecumod = skillartist.fecumod,
-                activo = skillartist.activo
+                id = rating.id,
+                artistid = rating.artistid,
+                projectname = rating.projectname,
+                score = rating.score,
+                iduseralta = rating.iduseralta,
+                fecalta = rating.fecalta,
+                iduserumod = rating.iduserumod,
+                fecumod = rating.fecumod,
+                activo = rating.activo
             });
         }
 
-        // PUT: api/Skillartists/Actualizar
+        // PUT: api/Ratings/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] SkillartistUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] RatingUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -101,17 +88,16 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == model.id);
+            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (skillartist == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            skillartist.skillid = model.skillid;
-            skillartist.artistid = model.artistid;
-            skillartist.iduserumod = model.iduserumod;
-            skillartist.fecumod = fechaHora;
+            rating.score = model.score;
+            rating.iduserumod = model.iduserumod;
+            rating.fecumod = fechaHora;
 
             try
             {
@@ -126,9 +112,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Skillartists/Crear
+        // POST: api/Ratings/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] SkillartistCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] RatingCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -136,10 +122,10 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Skillartist skillartist = new Skillartist
+            Rating rating = new Rating
             {
-                skillid = model.skillid,
                 artistid = model.artistid,
+                score = model.score,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -147,7 +133,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Skillartists.Add(skillartist);
+            _context.Ratings.Add(rating);
             try
             {
                 await _context.SaveChangesAsync();
@@ -157,10 +143,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(skillartist);
+            return Ok(rating);
         }
 
-        // DELETE: api/Skillartists/Eliminar/1
+        // DELETE: api/Ratings/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -169,13 +155,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var skillartist = await _context.Skillartists.FindAsync(id);
-            if (skillartist == null)
+            var rating = await _context.Ratings.FindAsync(id);
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            _context.Skillartists.Remove(skillartist);
+            _context.Ratings.Remove(rating);
             try
             {
                 await _context.SaveChangesAsync();
@@ -185,10 +171,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(skillartist);
+            return Ok(rating);
         }
 
-        // PUT: api/Skillartists/Desactivar/1
+        // PUT: api/Ratings/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -198,14 +184,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == id);
+            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skillartist == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            skillartist.activo = false;
+            rating.activo = false;
 
             try
             {
@@ -220,7 +206,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Skillartists/Activar/1
+        // PUT: api/Ratings/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -230,14 +216,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == id);
+            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skillartist == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            skillartist.activo = true;
+            rating.activo = true;
 
             try
             {
@@ -252,9 +238,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool SkillartistExists(int id)
+        private bool RatingExists(int id)
         {
-            return _context.Skillartists.Any(e => e.id == id);
+            return _context.Ratings.Any(e => e.id == id);
         }
     }
 }

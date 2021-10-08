@@ -191,7 +191,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(artist);
         }
 
         // DELETE: api/Artists/Eliminar/1

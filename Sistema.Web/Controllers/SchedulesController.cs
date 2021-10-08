@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,26 +15,35 @@ namespace Sistema.Web.Controllers
     //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
-    public class SkillartistsController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public SkillartistsController(DbContextSistema context)
+        public SchedulesController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Skillartists/Listar
+        // GET: api/Schedules/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillartistViewModel>> Listar()
+        public async Task<IEnumerable<ScheduleViewModel>> Listar()
         {
-            var Skillartist = await _context.Skillartists.ToListAsync();
+            var fechaHora = DateTime.Now;
 
-            return Skillartist.Select(r => new SkillartistViewModel
+            var Schedule = await _context.Schedules
+                .Where(f => f.startdate >= fechaHora || ( f.enddate > fechaHora && f.startdate < fechaHora ))
+                .OrderBy(o => o.artist).ThenByDescending(o => o.startdate)
+                .ToListAsync();
+
+            return Schedule.Select(r => new ScheduleViewModel
             {
                 id = r.id,
                 artistid = r.artistid,
-                skillid = r.skillid,
+                startdate = r.startdate,
+                enddate = r.enddate,
+                reason = r.reason,
+                limboid = r.limboid,
+                proyectoid = r.proyectoid,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -43,52 +53,38 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Skillartists/Select
-        [HttpGet("[action]")]
-        public async Task<IEnumerable<SkillartistSelectModel>> Select()
-        {
-            var skillartist = await _context.Skillartists
-                .Include(s => s.skill)
-                .Where(r => r.activo == true)
-                .OrderByDescending(r => r.skill.skill)
-                .ToListAsync();
-
-            return skillartist.Select(r => new SkillartistSelectModel
-            {
-                id = r.id,
-                artistid = r.artistid,
-                skillid = r.skillid
-            });
-        }
-
-        // GET: api/Skillartists/Mostrar/1
+        // GET: api/Schedules/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var skillartist = await _context.Skillartists.FindAsync(id);
+            var schedule = await _context.Schedules.FindAsync(id);
 
-            if (skillartist == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            return Ok(new SkillartistViewModel
+            return Ok(new ScheduleViewModel
             {
-                id = skillartist.id,
-                skillid = skillartist.skillid,
-                artistid = skillartist.artistid,
-                iduseralta = skillartist.iduseralta,
-                fecalta = skillartist.fecalta,
-                iduserumod = skillartist.iduserumod,
-                fecumod = skillartist.fecumod,
-                activo = skillartist.activo
+                id = schedule.id,
+                artistid = schedule.artistid,
+                startdate = schedule.startdate,
+                enddate = schedule.enddate,
+                reason = schedule.reason,
+                limboid = schedule.limboid,
+                proyectoid = schedule.proyectoid,
+                iduseralta = schedule.iduseralta,
+                fecalta = schedule.fecalta,
+                iduserumod = schedule.iduserumod,
+                fecumod = schedule.fecumod,
+                activo = schedule.activo
             });
         }
 
-        // PUT: api/Skillartists/Actualizar
+        // PUT: api/Schedules/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] SkillartistUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] ScheduleUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -101,17 +97,20 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == model.id);
+            var schedule = await _context.Schedules.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (skillartist == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            skillartist.skillid = model.skillid;
-            skillartist.artistid = model.artistid;
-            skillartist.iduserumod = model.iduserumod;
-            skillartist.fecumod = fechaHora;
+            schedule.startdate = model.startdate;
+            schedule.enddate = model.enddate;
+            schedule.reason = model.reason;
+            schedule.limboid = model.limboid;
+            schedule.proyectoid = model.proyectoid;
+            schedule.iduserumod = model.iduserumod;
+            schedule.fecumod = fechaHora;
 
             try
             {
@@ -126,9 +125,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // POST: api/Skillartists/Crear
+        // POST: api/Schedules/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] SkillartistCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] ScheduleCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -136,10 +135,14 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Skillartist skillartist = new Skillartist
+            Schedule schedule = new Schedule
             {
-                skillid = model.skillid,
                 artistid = model.artistid,
+                startdate = model.startdate,
+                enddate = model.enddate,
+                reason = model.reason,
+                limboid = model.limboid,
+                proyectoid = model.proyectoid,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -147,7 +150,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Skillartists.Add(skillartist);
+            _context.Schedules.Add(schedule);
             try
             {
                 await _context.SaveChangesAsync();
@@ -157,10 +160,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(skillartist);
+            return Ok(schedule);
         }
 
-        // DELETE: api/Skillartists/Eliminar/1
+        // DELETE: api/Schedules/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -169,13 +172,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var skillartist = await _context.Skillartists.FindAsync(id);
-            if (skillartist == null)
+            var schedule = await _context.Schedules.FindAsync(id);
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            _context.Skillartists.Remove(skillartist);
+            _context.Schedules.Remove(schedule);
             try
             {
                 await _context.SaveChangesAsync();
@@ -185,10 +188,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(skillartist);
+            return Ok(schedule);
         }
 
-        // PUT: api/Skillartists/Desactivar/1
+        // PUT: api/Schedules/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -198,14 +201,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == id);
+            var schedule = await _context.Schedules.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skillartist == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            skillartist.activo = false;
+            schedule.activo = false;
 
             try
             {
@@ -220,7 +223,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Skillartists/Activar/1
+        // PUT: api/Schedules/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -230,14 +233,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var skillartist = await _context.Skillartists.FirstOrDefaultAsync(c => c.id == id);
+            var schedule = await _context.Schedules.FirstOrDefaultAsync(c => c.id == id);
 
-            if (skillartist == null)
+            if (schedule == null)
             {
                 return NotFound();
             }
 
-            skillartist.activo = true;
+            schedule.activo = true;
 
             try
             {
@@ -252,9 +255,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool SkillartistExists(int id)
+        private bool ScheduleExists(int id)
         {
-            return _context.Skillartists.Any(e => e.id == id);
+            return _context.Schedules.Any(e => e.id == id);
         }
     }
 }
