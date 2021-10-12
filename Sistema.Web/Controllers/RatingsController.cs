@@ -109,7 +109,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(rating);
         }
 
         // POST: api/Ratings/Crear

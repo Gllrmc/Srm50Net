@@ -123,7 +123,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(mainroleartist);
         }
 
         // POST: api/Mainroleartists/Crear

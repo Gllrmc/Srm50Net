@@ -107,7 +107,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(note);
         }
 
         // POST: api/Notes/Crear

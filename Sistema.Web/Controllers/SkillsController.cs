@@ -136,7 +136,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(skill);
         }
 
         // POST: api/Skills/Crear

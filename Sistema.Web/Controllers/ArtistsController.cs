@@ -149,7 +149,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(artist);
         }
 
         // POST: api/Artists/Crear
