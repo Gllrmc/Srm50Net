@@ -95,6 +95,7 @@ namespace Sistema.Web.Controllers
                 return NotFound();
             }
 
+            rating.projectname = model.projectname;
             rating.score = model.score;
             rating.iduserumod = model.iduserumod;
             rating.fecumod = fechaHora;
@@ -125,6 +126,7 @@ namespace Sistema.Web.Controllers
             Rating rating = new Rating
             {
                 artistid = model.artistid,
+                projectname = model.projectname,
                 score = model.score,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
