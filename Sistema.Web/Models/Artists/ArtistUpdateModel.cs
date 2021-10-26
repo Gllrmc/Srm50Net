@@ -12,6 +12,7 @@ namespace Sistema.Web.Models.Artists
         public int id { get; set; }
         [Required]
         public string fullname { get; set; }
+        public int? mainroleid { get; set; }
         public string projectsworked { get; set; }
         public string cost { get; set; }
         public DateTime? costingdate { get; set; }

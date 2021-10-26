@@ -11,6 +11,8 @@ namespace Sistema.Web.Models.Artists
     {
         public int id { get; set; }
         public string fullname { get; set; }
+        public int? mainroleid { get; set; }
+        public string mainrole { get; set; }
         public string projectsworked { get; set; }
         public string cost { get; set; }
         [DataType(DataType.Date)]

@@ -52,7 +52,6 @@ namespace Sistema.Web
             services.AddMvc()
                 .AddNewtonsoftJson();
 
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +63,6 @@ namespace Sistema.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -74,12 +72,10 @@ namespace Sistema.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoint =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapFallbackToController("Index", "Home");
+                endpoint.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoint.MapFallbackToController("Index", "Home");
             });
         }
     }

@@ -25,7 +25,7 @@ namespace Sistema.Entidades.Artists
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public ICollection<Mainroleartist> mainroleartists { get; set; }
         public ICollection<Skillartist> skillartists { get; set; }
+        public ICollection<Artist> artists { get; set; }
     }
 }

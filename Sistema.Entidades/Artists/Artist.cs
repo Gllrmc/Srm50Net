@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace Sistema.Entidades.Artists
         public int id { get; set; }
         [Required]
         public string fullname { get; set; }
+        [ForeignKey("skill")]
+        public int? mainroleid { get; set; }
         public string projectsworked { get; set; }
         public string cost { get; set; }
         public DateTime? costingdate { get; set; }
@@ -33,7 +36,7 @@ namespace Sistema.Entidades.Artists
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public ICollection<Mainroleartist> mainroleartists { get; set; }
+        public Skill skill { get; set; }
         public ICollection<Skillartist> skillartists { get; set; }
         public ICollection<Selectedartist> selectedartists { get; set; }
         public ICollection<Schedule> schedules { get; set; }

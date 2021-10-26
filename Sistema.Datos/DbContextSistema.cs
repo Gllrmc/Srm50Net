@@ -20,7 +20,6 @@ namespace Sistema.Datos
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Selection> Selections { get; set; }
         public DbSet<Artist> Artists { get; set; }
-        public DbSet<Mainroleartist> Mainroleartists { get; set; }
         public DbSet<Skillartist> Skillartists { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -37,7 +36,6 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new SkillMap());
             modelBuilder.ApplyConfiguration(new SelectionMap());
             modelBuilder.ApplyConfiguration(new ArtistMap());
-            modelBuilder.ApplyConfiguration(new MainroleartistMap());
             modelBuilder.ApplyConfiguration(new SkillartistMap());
             modelBuilder.ApplyConfiguration(new ScheduleMap());
             modelBuilder.ApplyConfiguration(new RatingMap());

@@ -15,6 +15,9 @@ namespace Sistema.Datos.Mapping.Artists
         {
             builder.ToTable("artists")
                .HasKey(u => u.id);
+            builder.HasOne(a => a.skill)
+                .WithMany(d => d.artists)
+                .HasForeignKey(a => a.mainroleid);
         }
     }
 }

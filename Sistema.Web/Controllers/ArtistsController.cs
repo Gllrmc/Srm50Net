@@ -30,12 +30,14 @@ namespace Sistema.Web.Controllers
         public async Task<IEnumerable<ArtistViewModel>> Listar()
         {
             var Artist = await _context.Artists
-                .Include(m => m.mainroleartists)
+                .Include (s => s.skill)
                 .ToListAsync();
             return Artist.Select(r => new ArtistViewModel
             {
                 id = r.id,
                 fullname = r.fullname,
+                mainroleid = r.mainroleid,
+                mainrole = r.mainroleid.HasValue ? r.skill.skill : "",
                 projectsworked = r.projectsworked,
                 cost = r.cost,
                 costingdate = r.costingdate,
@@ -127,6 +129,7 @@ namespace Sistema.Web.Controllers
             }
 
             artist.fullname = model.fullname;
+            artist.mainroleid = model.mainroleid;
             artist.projectsworked = model.projectsworked;
             artist.cost = model.cost;
             artist.costingdate = model.costingdate;
@@ -165,6 +168,7 @@ namespace Sistema.Web.Controllers
             Artist artist = new Artist
             {
                 fullname = model.fullname,
+                mainroleid = model.mainroleid,
                 projectsworked = model.projectsworked,
                 cost = model.cost,
                 costingdate = model.costingdate,
