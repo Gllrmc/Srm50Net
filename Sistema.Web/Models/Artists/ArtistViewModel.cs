@@ -19,6 +19,7 @@ namespace Sistema.Web.Models.Artists
         public DateTime? costingdate { get; set; }
         public int? costinguserid { get; set; }
         public string email { get; set; }
+        public string alternativecontact { get; set; }
         public string phone { get; set; }
         public string mobile { get; set; }
         public string imgartist { get; set; }

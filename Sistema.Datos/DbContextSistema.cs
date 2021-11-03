@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sistema.Datos.Mapping.Artists;
+using Sistema.Datos.Mapping.Checkins;
 using Sistema.Datos.Mapping.Searchs;
 using Sistema.Datos.Mapping.Usuarios;
 using Sistema.Entidades.Artists;
+using Sistema.Entidades.Checkins;
 using Sistema.Entidades.Searchs;
 using Sistema.Entidades.Usuarios;
 using System;
@@ -25,6 +27,9 @@ namespace Sistema.Datos
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<Checkin> Checkins { get; set; }
+        public DbSet<Checkinartist> Checkinartists { get; set; }
+
         public DbContextSistema(DbContextOptions<DbContextSistema> options) : base(options)
         {
     }
@@ -41,6 +46,8 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new RatingMap());
             modelBuilder.ApplyConfiguration(new NoteMap());
             modelBuilder.ApplyConfiguration(new PortfolioMap());
+            modelBuilder.ApplyConfiguration(new CheckinMap());
+            modelBuilder.ApplyConfiguration(new CheckinartistMap());
         }
     }
 }

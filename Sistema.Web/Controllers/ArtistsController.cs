@@ -43,6 +43,7 @@ namespace Sistema.Web.Controllers
                 costingdate = r.costingdate,
                 costinguserid = r.costinguserid,
                 email = r.email,
+                alternativecontact = r.alternativecontact,
                 phone = r.phone,
                 mobile = r.mobile,
                 imgartist = r.imgartist,
@@ -94,6 +95,7 @@ namespace Sistema.Web.Controllers
                 costingdate = artist.costingdate,
                 costinguserid = artist.costinguserid,
                 email = artist.email,
+                alternativecontact = artist.alternativecontact,
                 phone = artist.phone,
                 mobile = artist.mobile,
                 imgartist = artist.imgartist,
@@ -135,6 +137,7 @@ namespace Sistema.Web.Controllers
             artist.costingdate = model.costingdate;
             artist.costinguserid = model.costinguserid;
             artist.email = model.email;
+            artist.alternativecontact = model.alternativecontact;
             artist.phone = model.phone;
             artist.mobile = model.mobile;
             artist.imgartist = model.imgartist;
@@ -174,6 +177,7 @@ namespace Sistema.Web.Controllers
                 costingdate = model.costingdate,
                 costinguserid = model.costinguserid,
                 email = model.email,
+                alternativecontact = model.alternativecontact,
                 phone = model.phone,
                 mobile = model.mobile,
                 imgartist = model.imgartist,

@@ -1,4 +1,5 @@
-﻿using Sistema.Entidades.Searchs;
+﻿using Sistema.Entidades.Checkins;
+using Sistema.Entidades.Searchs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +23,7 @@ namespace Sistema.Entidades.Artists
         public DateTime? costingdate { get; set; }
         public int? costinguserid { get; set; }
         public string email { get; set; }
+        public string alternativecontact { get; set; }
         public string phone { get; set; }
         public string mobile { get; set; }
         public string imgartist { get; set; }
@@ -43,5 +45,6 @@ namespace Sistema.Entidades.Artists
         public ICollection<Rating> ratings { get; set; }
         public ICollection<Note> notes { get; set; }
         public ICollection<Portfolio> portfolios { get; set; }
+        public ICollection<Checkinartist> checkinartists { get; set; }
     }
 }
