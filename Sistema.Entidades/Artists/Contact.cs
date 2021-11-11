@@ -8,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace Sistema.Entidades.Artists
 {
-    public class Rating
+    public class Contact
     {
         [Key]
         public int id { get; set; }
         [Required]
         [ForeignKey("artist")]
         public int artistid { get; set; }
-        public string projectname { get; set; }
         [Required]
-        public int score { get; set; }
+        public string contact { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]

@@ -41,7 +41,7 @@ namespace Sistema.Web.Controllers
                 artistid = r.artistid,
                 startdate = r.startdate,
                 enddate = r.enddate,
-                reason = r.reason,
+                comment = r.comment,
                 limboid = r.limboid,
                 proyectoid = r.proyectoid,
                 iduseralta = r.iduseralta,
@@ -71,7 +71,7 @@ namespace Sistema.Web.Controllers
                 artistid = schedule.artistid,
                 startdate = schedule.startdate,
                 enddate = schedule.enddate,
-                reason = schedule.reason,
+                comment = schedule.comment,
                 limboid = schedule.limboid,
                 proyectoid = schedule.proyectoid,
                 iduseralta = schedule.iduseralta,
@@ -106,7 +106,7 @@ namespace Sistema.Web.Controllers
 
             schedule.startdate = model.startdate;
             schedule.enddate = model.enddate;
-            schedule.reason = model.reason;
+            schedule.comment = model.comment;
             schedule.limboid = model.limboid;
             schedule.proyectoid = model.proyectoid;
             schedule.iduserumod = model.iduserumod;
@@ -140,7 +140,7 @@ namespace Sistema.Web.Controllers
                 artistid = model.artistid,
                 startdate = model.startdate,
                 enddate = model.enddate,
-                reason = model.reason,
+                comment = model.comment,
                 limboid = model.limboid,
                 proyectoid = model.proyectoid,
                 iduseralta = model.iduseralta,

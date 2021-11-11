@@ -19,7 +19,7 @@ namespace Sistema.Entidades.Artists
         public DateTime startdate { get; set; }
         [Required]
         public DateTime enddate { get; set; }
-        public string reason { get; set; }
+        public string comment { get; set; }
         public int? limboid { get; set; }
         public int? proyectoid { get; set; }
         [Required]

@@ -11,7 +11,7 @@ namespace Sistema.Web.Models.Artists
         public int artistid { get; set; }
         public DateTime startdate { get; set; }
         public DateTime enddate { get; set; }
-        public string reason { get; set; }
+        public string comment { get; set; }
         public int? limboid { get; set; }
         public int? proyectoid { get; set; }
         public int iduseralta { get; set; }

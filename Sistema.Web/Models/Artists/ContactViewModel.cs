@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Models.Artists
 {
-    public class RatingViewModel
+    public class ContactViewModel
     {
         public int id { get; set; }
         public int artistid { get; set; }
-        public string projectname { get; set; }
-        public int score { get; set; }
+        public string contact { get; set; }
         public int iduseralta { get; set; }
         public DateTime fecalta { get; set; }
         public int iduserumod { get; set; }

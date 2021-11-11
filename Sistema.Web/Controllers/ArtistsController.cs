@@ -38,14 +38,8 @@ namespace Sistema.Web.Controllers
                 fullname = r.fullname,
                 mainroleid = r.mainroleid,
                 mainrole = r.mainroleid.HasValue ? r.skill.skill : "",
-                projectsworked = r.projectsworked,
-                cost = r.cost,
-                costingdate = r.costingdate,
-                costinguserid = r.costinguserid,
-                email = r.email,
-                alternativecontact = r.alternativecontact,
-                phone = r.phone,
-                mobile = r.mobile,
+                dailyrate = r.dailyrate,
+                rating = r.rating,
                 imgartist = r.imgartist,
                 proveedorid = r.proveedorid,
                 iduseralta = r.iduseralta,
@@ -90,14 +84,8 @@ namespace Sistema.Web.Controllers
             {
                 id = artist.id,
                 fullname = artist.fullname,
-                projectsworked = artist.projectsworked,
-                cost = artist.cost,
-                costingdate = artist.costingdate,
-                costinguserid = artist.costinguserid,
-                email = artist.email,
-                alternativecontact = artist.alternativecontact,
-                phone = artist.phone,
-                mobile = artist.mobile,
+                dailyrate = artist.dailyrate,
+                rating = artist.rating,
                 imgartist = artist.imgartist,
                 proveedorid = artist.proveedorid,
                 iduseralta = artist.iduseralta,
@@ -132,14 +120,8 @@ namespace Sistema.Web.Controllers
 
             artist.fullname = model.fullname;
             artist.mainroleid = model.mainroleid;
-            artist.projectsworked = model.projectsworked;
-            artist.cost = model.cost;
-            artist.costingdate = model.costingdate;
-            artist.costinguserid = model.costinguserid;
-            artist.email = model.email;
-            artist.alternativecontact = model.alternativecontact;
-            artist.phone = model.phone;
-            artist.mobile = model.mobile;
+            artist.dailyrate = model.dailyrate;
+            artist.rating = model.rating;
             artist.imgartist = model.imgartist;
             artist.proveedorid = model.proveedorid;
             artist.iduserumod = model.iduserumod;
@@ -172,14 +154,8 @@ namespace Sistema.Web.Controllers
             {
                 fullname = model.fullname,
                 mainroleid = model.mainroleid,
-                projectsworked = model.projectsworked,
-                cost = model.cost,
-                costingdate = model.costingdate,
-                costinguserid = model.costinguserid,
-                email = model.email,
-                alternativecontact = model.alternativecontact,
-                phone = model.phone,
-                mobile = model.mobile,
+                dailyrate = model.dailyrate,
+                rating = model.rating,
                 imgartist = model.imgartist,
                 proveedorid = model.proveedorid,
                 iduseralta = model.iduseralta,

@@ -24,9 +24,9 @@ namespace Sistema.Datos
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Skillartist> Skillartists { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Checkin> Checkins { get; set; }
         public DbSet<Checkinartist> Checkinartists { get; set; }
 
@@ -43,9 +43,9 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new ArtistMap());
             modelBuilder.ApplyConfiguration(new SkillartistMap());
             modelBuilder.ApplyConfiguration(new ScheduleMap());
-            modelBuilder.ApplyConfiguration(new RatingMap());
             modelBuilder.ApplyConfiguration(new NoteMap());
             modelBuilder.ApplyConfiguration(new PortfolioMap());
+            modelBuilder.ApplyConfiguration(new ContactMap());
             modelBuilder.ApplyConfiguration(new CheckinMap());
             modelBuilder.ApplyConfiguration(new CheckinartistMap());
         }

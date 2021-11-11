@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Models.Artists
 {
-    public class RatingCreateModel
+    public class ContactUpdateModel
     {
         [Required]
+        public int id { get; set; }
+        [Required]
         public int artistid { get; set; }
-        public string projectname { get; set; }
         [Required]
-        public int score { get; set; }
+        public string contact { get; set; }
         [Required]
-        public int iduseralta { get; set; }
+        public int iduserumod { get; set; }
     }
 }

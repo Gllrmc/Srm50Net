@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,29 +14,28 @@ namespace Sistema.Web.Controllers
     //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
-    public class RatingsController : ControllerBase
+    public class ContactsController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public RatingsController(DbContextSistema context)
+        public ContactsController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Ratings/Listar
+        // GET: api/Contacts/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<RatingViewModel>> Listar()
+        public async Task<IEnumerable<ContactViewModel>> Listar()
         {
-            var Rating = await _context.Ratings
+            var Contact = await _context.Contacts
                 .OrderBy(o => o.artist).ThenByDescending(o => o.fecumod)
                 .ToListAsync();
 
-            return Rating.Select(r => new RatingViewModel
+            return Contact.Select(r => new ContactViewModel
             {
                 id = r.id,
                 artistid = r.artistid,
-                projectname = r.projectname,
-                score = r.score,
+                contact = r.contact,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -47,35 +45,34 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Ratings/Mostrar/1
+        // GET: api/Contacts/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var rating = await _context.Ratings.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
 
-            if (rating == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            return Ok(new RatingViewModel
+            return Ok(new ContactViewModel
             {
-                id = rating.id,
-                artistid = rating.artistid,
-                projectname = rating.projectname,
-                score = rating.score,
-                iduseralta = rating.iduseralta,
-                fecalta = rating.fecalta,
-                iduserumod = rating.iduserumod,
-                fecumod = rating.fecumod,
-                activo = rating.activo
+                id = contact.id,
+                artistid = contact.artistid,
+                contact = contact.contact,
+                iduseralta = contact.iduseralta,
+                fecalta = contact.fecalta,
+                iduserumod = contact.iduserumod,
+                fecumod = contact.fecumod,
+                activo = contact.activo
             });
         }
 
-        // PUT: api/Ratings/Actualizar
+        // PUT: api/Contacts/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] RatingUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] ContactUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,17 +85,16 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == model.id);
+            var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (rating == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            rating.projectname = model.projectname;
-            rating.score = model.score;
-            rating.iduserumod = model.iduserumod;
-            rating.fecumod = fechaHora;
+            contact.contact = model.contact;
+            contact.iduserumod = model.iduserumod;
+            contact.fecumod = fechaHora;
 
             try
             {
@@ -110,12 +106,12 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(rating);
+            return Ok(contact);
         }
 
-        // POST: api/Ratings/Crear
+        // POST: api/Contacts/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] RatingCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] ContactCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -123,11 +119,10 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Rating rating = new Rating
+            Contact contact = new Contact
             {
                 artistid = model.artistid,
-                projectname = model.projectname,
-                score = model.score,
+                contact = model.contact,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -135,7 +130,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Ratings.Add(rating);
+            _context.Contacts.Add(contact);
             try
             {
                 await _context.SaveChangesAsync();
@@ -145,10 +140,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(rating);
+            return Ok(contact);
         }
 
-        // DELETE: api/Ratings/Eliminar/1
+        // DELETE: api/Contacts/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -157,13 +152,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var rating = await _context.Ratings.FindAsync(id);
-            if (rating == null)
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            _context.Ratings.Remove(rating);
+            _context.Contacts.Remove(contact);
             try
             {
                 await _context.SaveChangesAsync();
@@ -173,10 +168,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(rating);
+            return Ok(contact);
         }
 
-        // PUT: api/Ratings/Desactivar/1
+        // PUT: api/Contacts/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -186,14 +181,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == id);
+            var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.id == id);
 
-            if (rating == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            rating.activo = false;
+            contact.activo = false;
 
             try
             {
@@ -208,7 +203,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Ratings/Activar/1
+        // PUT: api/Contacts/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -218,14 +213,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var rating = await _context.Ratings.FirstOrDefaultAsync(c => c.id == id);
+            var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.id == id);
 
-            if (rating == null)
+            if (contact == null)
             {
                 return NotFound();
             }
 
-            rating.activo = true;
+            contact.activo = true;
 
             try
             {
@@ -240,9 +235,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool RatingExists(int id)
+        private bool ContactExists(int id)
         {
-            return _context.Ratings.Any(e => e.id == id);
+            return _context.Contacts.Any(e => e.id == id);
         }
     }
 }

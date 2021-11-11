@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Sistema.Datos.Mapping.Artists
 {
-    public class RatingMap : IEntityTypeConfiguration<Rating>
+    public class ContactMap : IEntityTypeConfiguration<Contact>
     {
-        public void Configure(EntityTypeBuilder<Rating> builder)
+        public void Configure(EntityTypeBuilder<Contact> builder)
         {
-            builder.ToTable("ratings")
+            builder.ToTable("contacts")
                .HasKey(u => u.id);
             builder.HasOne(a => a.artist)
-                .WithMany(d => d.ratings)
+                .WithMany(d => d.contacts)
                 .HasForeignKey(a => a.artistid);
         }
     }
