@@ -12,7 +12,7 @@ using Sistema.Web.Models.Artists;
 
 namespace Sistema.Web.Controllers
 {
-    //[Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
+    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
     [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
