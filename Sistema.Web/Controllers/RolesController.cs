@@ -12,7 +12,7 @@ using Sistema.Web.Models.Usuarios;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+    [Authorize(Roles = "Administrador,Owner")]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase

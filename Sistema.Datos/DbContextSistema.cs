@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sistema.Datos.Mapping.Artists;
-using Sistema.Datos.Mapping.Checkins;
+using Sistema.Datos.Mapping.Preselects;
 using Sistema.Datos.Mapping.Searchs;
 using Sistema.Datos.Mapping.Usuarios;
 using Sistema.Entidades.Artists;
-using Sistema.Entidades.Checkins;
+using Sistema.Entidades.Preselects;
 using Sistema.Entidades.Searchs;
 using Sistema.Entidades.Usuarios;
 using System;
@@ -27,8 +27,8 @@ namespace Sistema.Datos
         public DbSet<Note> Notes { get; set; }
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Checkin> Checkins { get; set; }
-        public DbSet<Checkinartist> Checkinartists { get; set; }
+        public DbSet<Preselect> Preselects { get; set; }
+        public DbSet<Preselectartist> Preselectartists { get; set; }
 
         public DbContextSistema(DbContextOptions<DbContextSistema> options) : base(options)
         {
@@ -46,8 +46,8 @@ namespace Sistema.Datos
             modelBuilder.ApplyConfiguration(new NoteMap());
             modelBuilder.ApplyConfiguration(new PortfolioMap());
             modelBuilder.ApplyConfiguration(new ContactMap());
-            modelBuilder.ApplyConfiguration(new CheckinMap());
-            modelBuilder.ApplyConfiguration(new CheckinartistMap());
+            modelBuilder.ApplyConfiguration(new PreselectMap());
+            modelBuilder.ApplyConfiguration(new PreselectartistMap());
         }
     }
 }

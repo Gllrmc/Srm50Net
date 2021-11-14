@@ -7,34 +7,34 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Checkins;
-using Sistema.Web.Models.Checkins;
+using Sistema.Entidades.Preselects;
+using Sistema.Web.Models.Preselects;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
+    [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CheckinsController : ControllerBase
+    public class PreselectsController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public CheckinsController(DbContextSistema context)
+        public PreselectsController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Checkins/Listar
+        // GET: api/Preselecs/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<CheckinViewModel>> Listar()
+        public async Task<IEnumerable<PreselectViewModel>> Listar()
         {
-            var Checkin = await _context.Checkins.ToListAsync();
+            var Checkin = await _context.Preselects.ToListAsync();
 
-            return Checkin.Select(r => new CheckinViewModel
+            return Checkin.Select(r => new PreselectViewModel
             {
                 id = r.id,
-                checkin = r.checkin,
-                detail = r.detail,
+                code = r.code,
+                preselect = r.preselect,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -44,34 +44,34 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Checkins/Mostrar/1
+        // GET: api/Preselecs/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var checkin = await _context.Checkins.FindAsync(id);
+            var preselec = await _context.Preselects.FindAsync(id);
 
-            if (checkin == null)
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            return Ok(new CheckinViewModel
+            return Ok(new PreselectViewModel
             {
-                id = checkin.id,
-                checkin = checkin.checkin,
-                detail = checkin.detail,
-                iduseralta = checkin.iduseralta,
-                fecalta = checkin.fecalta,
-                iduserumod = checkin.iduserumod,
-                fecumod = checkin.fecumod,
-                activo = checkin.activo
+                id = preselec.id,
+                code = preselec.code,
+                preselect = preselec.preselect,
+                iduseralta = preselec.iduseralta,
+                fecalta = preselec.fecalta,
+                iduserumod = preselec.iduserumod,
+                fecumod = preselec.fecumod,
+                activo = preselec.activo
             });
         }
 
-        // PUT: api/Checkins/Actualizar
+        // PUT: api/Preselect/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] CheckinUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] PreselectUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -84,17 +84,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var checkin = await _context.Checkins.FirstOrDefaultAsync(c => c.id == model.id);
+            var preselec = await _context.Preselects.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (checkin == null)
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            checkin.checkin = model.checkin;
-            checkin.detail = model.detail;
-            checkin.iduserumod = model.iduserumod;
-            checkin.fecumod = fechaHora;
+            preselec.code = model.code;
+            preselec.preselect = model.preselect;
+            preselec.iduserumod = model.iduserumod;
+            preselec.fecumod = fechaHora;
 
             try
             {
@@ -106,12 +106,12 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkin);
+            return Ok(preselec);
         }
 
-        // POST: api/Checkins/Crear
+        // POST: api/Preselect/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] CheckinCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] PreselectCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -119,10 +119,10 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Checkin checkin = new Checkin
+            Preselect preselect = new Preselect
             {
-                checkin = model.checkin,
-                detail = model.detail,
+                code = model.code,
+                preselect = model.preselect,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -130,7 +130,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Checkins.Add(checkin);
+            _context.Preselects.Add(preselect);
             try
             {
                 await _context.SaveChangesAsync();
@@ -140,10 +140,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkin);
+            return Ok(preselect);
         }
 
-        // DELETE: api/Checkins/Eliminar/1
+        // DELETE: api/Preselect/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -152,13 +152,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var checkin = await _context.Checkins.FindAsync(id);
-            if (checkin == null)
+            var preselec = await _context.Preselects.FindAsync(id);
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            _context.Checkins.Remove(checkin);
+            _context.Preselects.Remove(preselec);
             try
             {
                 await _context.SaveChangesAsync();
@@ -168,10 +168,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkin);
+            return Ok(preselec);
         }
 
-        // PUT: api/Checkins/Desactivar/1
+        // PUT: api/Preselect/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -181,14 +181,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var checkin = await _context.Checkins.FirstOrDefaultAsync(c => c.id == id);
+            var preselec = await _context.Preselects.FirstOrDefaultAsync(c => c.id == id);
 
-            if (checkin == null)
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            checkin.activo = false;
+            preselec.activo = false;
 
             try
             {
@@ -203,7 +203,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Checkins/Activar/1
+        // PUT: api/Preselect/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -213,14 +213,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var checkin = await _context.Checkins.FirstOrDefaultAsync(c => c.id == id);
+            var preselec = await _context.Preselects.FirstOrDefaultAsync(c => c.id == id);
 
-            if (checkin == null)
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            checkin.activo = true;
+            preselec.activo = true;
 
             try
             {
@@ -237,7 +237,7 @@ namespace Sistema.Web.Controllers
 
         private bool CheckinExists(int id)
         {
-            return _context.Checkins.Any(e => e.id == id);
+            return _context.Preselects.Any(e => e.id == id);
         }
     }
 }

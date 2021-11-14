@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sistema.Web.Models.Checkins
+namespace Sistema.Web.Models.Preselects
 {
-    public class CheckinartistCreateModel
+    public class PreselectCreateModel
     {
         [Required]
-        public int artistid { get; set; }
+        public string code { get; set; }
         [Required]
-        public int checkinid { get; set; }
+        public string preselect { get; set; }
         [Required]
         public int iduseralta { get; set; }
     }

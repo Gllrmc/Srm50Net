@@ -7,34 +7,34 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
-using Sistema.Entidades.Checkins;
-using Sistema.Web.Models.Checkins;
+using Sistema.Entidades.Preselects;
+using Sistema.Web.Models.Preselects;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,ExecutiveProducer,AsistProduccion,LineProducer,ChiefProducer,AsistGeneral")]
+    [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CheckinartistsController : ControllerBase
+    public class PreselectartistsController : ControllerBase
     {
         private readonly DbContextSistema _context;
 
-        public CheckinartistsController(DbContextSistema context)
+        public PreselectartistsController(DbContextSistema context)
         {
             _context = context;
         }
 
-        // GET: api/Checkinartists/Listar
+        // GET: api/Preselectartists/Listar
         [HttpGet("[action]")]
-        public async Task<IEnumerable<CheckinartistViewModel>> Listar()
+        public async Task<IEnumerable<PreselectartistViewModel>> Listar()
         {
-            var Checkinartist = await _context.Checkinartists.ToListAsync();
+            var Preselectartist = await _context.Preselectartists.ToListAsync();
 
-            return Checkinartist.Select(r => new CheckinartistViewModel
+            return Preselectartist.Select(r => new PreselectartistViewModel
             {
                 id = r.id,
                 artistid = r.artistid,
-                checkinid = r.checkinid,
+                preselectid = r.preselectid,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -44,34 +44,34 @@ namespace Sistema.Web.Controllers
 
         }
 
-        // GET: api/Checkinartists/Mostrar/1
+        // GET: api/Preselectartists/Mostrar/1
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Mostrar([FromRoute] int id)
         {
 
-            var checkinartist = await _context.Checkinartists.FindAsync(id);
+            var preselectartist = await _context.Preselectartists.FindAsync(id);
 
-            if (checkinartist == null)
+            if (preselectartist == null)
             {
                 return NotFound();
             }
 
-            return Ok(new CheckinartistViewModel
+            return Ok(new PreselectartistViewModel
             {
-                id = checkinartist.id,
-                checkinid = checkinartist.checkinid,
-                artistid = checkinartist.artistid,
-                iduseralta = checkinartist.iduseralta,
-                fecalta = checkinartist.fecalta,
-                iduserumod = checkinartist.iduserumod,
-                fecumod = checkinartist.fecumod,
-                activo = checkinartist.activo
+                id = preselectartist.id,
+                preselectid = preselectartist.preselectid,
+                artistid = preselectartist.artistid,
+                iduseralta = preselectartist.iduseralta,
+                fecalta = preselectartist.fecalta,
+                iduserumod = preselectartist.iduserumod,
+                fecumod = preselectartist.fecumod,
+                activo = preselectartist.activo
             });
         }
 
-        // PUT: api/Checkinartists/Actualizar
+        // PUT: api/Preselectartists/Actualizar
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizar([FromBody] CheckinartistUpdateModel model)
+        public async Task<IActionResult> Actualizar([FromBody] PreselectartistUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -84,17 +84,17 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            var checkinartist = await _context.Checkinartists.FirstOrDefaultAsync(c => c.id == model.id);
+            var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == model.id);
 
-            if (checkinartist == null)
+            if (preselectartist == null)
             {
                 return NotFound();
             }
 
-            checkinartist.checkinid = model.checkinid;
-            checkinartist.artistid = model.artistid;
-            checkinartist.iduserumod = model.iduserumod;
-            checkinartist.fecumod = fechaHora;
+            preselectartist.preselectid = model.preselectid;
+            preselectartist.artistid = model.artistid;
+            preselectartist.iduserumod = model.iduserumod;
+            preselectartist.fecumod = fechaHora;
 
             try
             {
@@ -106,12 +106,52 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkinartist);
+            return Ok(preselectartist);
         }
 
-        // POST: api/Checkinartists/Crearcheckinset
+        // PUT: api/Preselectartists/Actualizarpreselectset
+        [HttpPut("[action]")]
+        public async Task<IActionResult> Actualizarpreselectset([FromBody] PreselectartistUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (model.id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var fechaHora = DateTime.Now;
+            var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == model.id);
+
+            if (preselectartist == null)
+            {
+                return NotFound();
+            }
+
+            preselectartist.preselectid = model.preselectid;
+            preselectartist.artistid = model.artistid;
+            preselectartist.iduserumod = model.iduserumod;
+            preselectartist.fecumod = fechaHora;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Guardar Excepción
+                return BadRequest();
+            }
+
+            return Ok(preselectartist);
+        }
+
+        // POST: api/Preselectartists/Crearpreselectset
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crearcheckinset([FromBody] CheckinartistMassiveCreateModel model)
+        public async Task<IActionResult> Crearpreselectset([FromBody] PreselectartistMassiveCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -120,10 +160,10 @@ namespace Sistema.Web.Controllers
 
             var fechaHora = DateTime.Now;
 
-            Checkin checkin = new Checkin
+            Preselect preselect = new Preselect
             {
-                checkin = model.checkin,
-                detail = model.detail,
+                code = model.code,
+                preselect = model.preselect,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
                 iduserumod = model.iduseralta,
@@ -131,7 +171,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Checkins.Add(checkin);
+            _context.Preselects.Add(preselect);
             try
             {
                 await _context.SaveChangesAsync();
@@ -143,10 +183,10 @@ namespace Sistema.Web.Controllers
 
             for (var i = 0; i < model.artistid.Length; i++)
             {
-                Checkinartist checkinartist = new Checkinartist
+                Preselectartist preselectartist = new Preselectartist
                 {
                     artistid = model.artistid[i],
-                    checkinid = checkin.id,
+                    preselectid = preselect.id,
                     iduseralta = model.iduseralta,
                     fecalta = fechaHora,
                     iduserumod = model.iduseralta,
@@ -154,7 +194,7 @@ namespace Sistema.Web.Controllers
                     activo = true
                 };
 
-                _context.Checkinartists.Add(checkinartist);
+                _context.Preselectartists.Add(preselectartist);
             }
 
             try
@@ -170,9 +210,9 @@ namespace Sistema.Web.Controllers
         }
 
 
-        // POST: api/Checkinartists/Crear
+        // POST: api/Preselectartists/Crear
         [HttpPost("[action]")]
-        public async Task<IActionResult> Crear([FromBody] CheckinartistCreateModel model)
+        public async Task<IActionResult> Crear([FromBody] PreselectartistCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -180,9 +220,9 @@ namespace Sistema.Web.Controllers
             }
 
             var fechaHora = DateTime.Now;
-            Checkinartist checkinartist = new Checkinartist
+            Preselectartist preselectartist = new Preselectartist
             {
-                checkinid = model.checkinid,
+                preselectid = model.preselectid,
                 artistid = model.artistid,
                 iduseralta = model.iduseralta,
                 fecalta = fechaHora,
@@ -191,7 +231,7 @@ namespace Sistema.Web.Controllers
                 activo = true
             };
 
-            _context.Checkinartists.Add(checkinartist);
+            _context.Preselectartists.Add(preselectartist);
             try
             {
                 await _context.SaveChangesAsync();
@@ -201,12 +241,12 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkinartist);
+            return Ok(preselectartist);
         }
 
-        // DELETE: api/Checkinartists/Eliminarcheckinset/1
+        // DELETE: api/Preselectartists/Eliminarpreselectset/1
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> Eliminarcheckinset([FromRoute] int id)
+        public async Task<IActionResult> Eliminarpreselectset([FromRoute] int id)
         {
 
             if (!ModelState.IsValid)
@@ -214,15 +254,15 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var checkin = await _context.Checkins.FindAsync(id);
-            if (checkin == null)
+            var preselect = await _context.Preselects.FindAsync(id);
+            if (preselect == null)
             {
                 return NotFound();
             }
-            _context.Checkins.Remove(checkin);
+            _context.Preselects.Remove(preselect);
 
-            var baja = await _context.Checkinartists.Where(f => id == f.checkinid).ToListAsync();
-            baja.ForEach(a => _context.Checkinartists.Remove(a));
+            var baja = await _context.Preselectartists.Where(f => id == f.preselectid).ToListAsync();
+            baja.ForEach(a => _context.Preselectartists.Remove(a));
 
             try
             {
@@ -236,7 +276,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // DELETE: api/Checkinartists/Eliminar/1
+        // DELETE: api/Preselectartists/Eliminar/1
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> Eliminar([FromRoute] int id)
         {
@@ -245,13 +285,13 @@ namespace Sistema.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var checkinartist = await _context.Checkinartists.FindAsync(id);
-            if (checkinartist == null)
+            var preselectartist = await _context.Preselectartists.FindAsync(id);
+            if (preselectartist == null)
             {
                 return NotFound();
             }
 
-            _context.Checkinartists.Remove(checkinartist);
+            _context.Preselectartists.Remove(preselectartist);
             try
             {
                 await _context.SaveChangesAsync();
@@ -261,10 +301,10 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(checkinartist);
+            return Ok(preselectartist);
         }
 
-        // PUT: api/Checkinartists/Desactivar/1
+        // PUT: api/Preselectartists/Desactivar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -274,14 +314,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var checkinartist = await _context.Checkinartists.FirstOrDefaultAsync(c => c.id == id);
+            var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == id);
 
-            if (checkinartist == null)
+            if (preselectartist == null)
             {
                 return NotFound();
             }
 
-            checkinartist.activo = false;
+            preselectartist.activo = false;
 
             try
             {
@@ -296,7 +336,7 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        // PUT: api/Checkinartists/Activar/1
+        // PUT: api/Preselectartists/Activar/1
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {
@@ -306,14 +346,14 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            var checkinartist = await _context.Checkinartists.FirstOrDefaultAsync(c => c.id == id);
+            var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == id);
 
-            if (checkinartist == null)
+            if (preselectartist == null)
             {
                 return NotFound();
             }
 
-            checkinartist.activo = true;
+            preselectartist.activo = true;
 
             try
             {
@@ -328,9 +368,9 @@ namespace Sistema.Web.Controllers
             return Ok();
         }
 
-        private bool CheckinartistExists(int id)
+        private bool PreselectartistExists(int id)
         {
-            return _context.Checkinartists.Any(e => e.id == id);
+            return _context.Preselectartists.Any(e => e.id == id);
         }
     }
 }

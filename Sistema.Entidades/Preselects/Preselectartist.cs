@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema.Entidades.Checkins
+namespace Sistema.Entidades.Preselects
 {
-    public class Checkinartist
+    public class Preselectartist
     {
         [Key]
         public int id { get; set; }
@@ -17,8 +17,8 @@ namespace Sistema.Entidades.Checkins
         [ForeignKey("artist")]
         public int artistid { get; set; }
         [Required]
-        [ForeignKey("checkin")]
-        public int checkinid { get; set; }
+        [ForeignKey("preselect")]
+        public int preselectid { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]
@@ -30,6 +30,6 @@ namespace Sistema.Entidades.Checkins
         [Required]
         public bool activo { get; set; }
         public Artist artist { get; set; }
-        public Checkin checkin { get; set; }
+        public Preselect preselect { get; set; }
     }
 }

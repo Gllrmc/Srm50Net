@@ -31,7 +31,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Listar
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> Listar()
         {
@@ -65,7 +65,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Listaractivos
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioViewModel>> Listaractivos()
         {
@@ -96,7 +96,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Selectall
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioSelectModel>> Selectall()
         {
@@ -120,7 +120,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Select
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpGet("[action]")]
         public async Task<IEnumerable<UsuarioSelectModel>> Select()
         {
@@ -145,7 +145,7 @@ namespace Sistema.Web.Controllers
         }
 
         // GET: api/Usuarios/Traer/1
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion,Liderproyecto,Consultor,Dataentry")]
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> Traer([FromRoute] int id)
         {
@@ -202,7 +202,7 @@ namespace Sistema.Web.Controllers
         }
 
         // POST: api/Usuarios/Crear
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,Owner")]
         [HttpPost("[action]")]
         public async Task<IActionResult> Crear([FromBody] UsuarioCreateModel model)
         {
@@ -258,7 +258,7 @@ namespace Sistema.Web.Controllers
 
 
         // PUT: api/Usuarios/Actualizar
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,Owner")]
         [HttpPut("[action]")]
         public async Task<IActionResult> Actualizar([FromBody] UsuarioUpdateModel model)
         {
@@ -326,7 +326,7 @@ namespace Sistema.Web.Controllers
         }
 
         // PUT: api/Usuarios/Desactivar/1
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,Owner")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Desactivar([FromRoute] int id)
         {
@@ -360,7 +360,7 @@ namespace Sistema.Web.Controllers
         }
 
         // PUT: api/Usuarios/Activar/1
-        [Authorize(Roles = "Administrador,JefeAdministracion,AsistAdministracion")]
+        [Authorize(Roles = "Administrador,Owner")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> Activar([FromRoute] int id)
         {

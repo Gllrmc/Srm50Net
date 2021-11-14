@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sistema.Entidades.Checkins
+namespace Sistema.Entidades.Preselects
 {
-    public class Checkin
+    public class Preselect
     {
         [Key]
         public int id { get; set; }
         [Required]
-        public string checkin { get; set; }
-        public string detail { get; set; }
+        public string code { get; set; }
+        [Required]
+        public string preselect { get; set; }
         [Required]
         public int iduseralta { get; set; }
         [Required]
@@ -24,6 +25,6 @@ namespace Sistema.Entidades.Checkins
         public DateTime fecumod { get; set; }
         [Required]
         public bool activo { get; set; }
-        public IEnumerable<Checkinartist> checkinartists { get; set; }
+        public IEnumerable<Preselectartist> preselectartists { get; set; }
     }
 }

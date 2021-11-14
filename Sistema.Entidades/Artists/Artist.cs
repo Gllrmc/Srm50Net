@@ -1,4 +1,4 @@
-﻿using Sistema.Entidades.Checkins;
+﻿using Sistema.Entidades.Preselects;
 using Sistema.Entidades.Searchs;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace Sistema.Entidades.Artists
         public ICollection<Schedule> schedules { get; set; }
         public ICollection<Note> notes { get; set; }
         public ICollection<Portfolio> portfolios { get; set; }
-        public ICollection<Checkinartist> checkinartists { get; set; }
+        public ICollection<Preselectartist> preselectartists { get; set; }
         public ICollection<Contact> contacts { get; set; }
     }
 }

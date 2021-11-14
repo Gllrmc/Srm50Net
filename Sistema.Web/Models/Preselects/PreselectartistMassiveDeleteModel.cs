@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sistema.Web.Models.Checkins
+namespace Sistema.Web.Models.Preselects
 {
-    public class CheckinartistMassiveDeleteModel
+    public class PreselectartistMassiveDeleteModel
     {
         [Required]
         public int id { get; set; }
