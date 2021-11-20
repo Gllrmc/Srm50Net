@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
     [Route("api/[controller]")]
     [ApiController]
     public class ExpressController : ControllerBase
@@ -22,6 +21,7 @@ namespace Sistema.Web.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpPost("[action]")]
         public async Task<IActionResult> UploadFiles(IFormCollection files)
         {
@@ -42,6 +42,7 @@ namespace Sistema.Web.Controllers
             }
         }
 
+        // GET: api/Express/DownloadFile/ASSAA12SASA
         [HttpGet("[action]/{file}")]
         public async Task<byte[]> DownloadFile([FromRoute] string file)
         {
@@ -55,6 +56,7 @@ namespace Sistema.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
         [HttpDelete("[action]/{file}")]
         public IActionResult DeleteFile([FromRoute] string file)
         {

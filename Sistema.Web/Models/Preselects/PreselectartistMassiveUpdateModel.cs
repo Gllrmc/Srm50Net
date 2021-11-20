@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Sistema.Web.Models.Preselects
 {
-    public class PreselectMassiveUpdateModel
+    public class PreselectartistMassiveUpdateModel
     {
         [Required]
-        public int id { get; set; }
+        public int preselectid { get; set; }
         [Required]
         public int[] artistid { get; set; }
         [Required]

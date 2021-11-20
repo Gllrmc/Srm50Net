@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sistema.Datos;
 using Sistema.Entidades.Preselects;
+using Sistema.Web.Models.Artists;
 using Sistema.Web.Models.Preselects;
 
 namespace Sistema.Web.Controllers
 {
-    [Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
+    //[Authorize(Roles = "Administrador,Owner,Collaborator,Reader")]
     [Route("api/[controller]")]
     [ApiController]
     public class PreselectartistsController : ControllerBase
@@ -35,6 +36,36 @@ namespace Sistema.Web.Controllers
                 id = r.id,
                 artistid = r.artistid,
                 preselectid = r.preselectid,
+                iduseralta = r.iduseralta,
+                fecalta = r.fecalta,
+                iduserumod = r.iduserumod,
+                fecumod = r.fecumod,
+                activo = r.activo
+            });
+
+        }
+
+        // GET: api/Preselectartists/Listarartists/1
+        [HttpGet("[action]/{id}")]
+        public async Task<IEnumerable<PreselectMassiveViewModel>> Listarartists([FromRoute] int id)
+        {
+            var Artists = await _context.Preselectartists
+                .Include(a => a.artist)
+                .ThenInclude(s => s.skill)
+                .Where (p => p.preselectid == id)
+                .ToListAsync();
+
+            return Artists.Select(r => new PreselectMassiveViewModel
+            {
+                id = r.id,
+                artistid = r.artist.id,
+                fullname = r.artist.fullname,
+                mainroleid = r.artist.mainroleid,
+                mainrole = r.artist.mainroleid.HasValue ? r.artist.skill.skill : "",
+                dailyrate = r.artist.dailyrate,
+                rating = r.artist.rating,
+                imgartist = r.artist.imgartist,
+                proveedorid = r.artist.proveedorid,
                 iduseralta = r.iduseralta,
                 fecalta = r.fecalta,
                 iduserumod = r.iduserumod,
@@ -86,6 +117,7 @@ namespace Sistema.Web.Controllers
             var fechaHora = DateTime.Now;
             var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == model.id);
 
+
             if (preselectartist == null)
             {
                 return NotFound();
@@ -111,30 +143,52 @@ namespace Sistema.Web.Controllers
 
         // PUT: api/Preselectartists/Actualizarpreselectset
         [HttpPut("[action]")]
-        public async Task<IActionResult> Actualizarpreselectset([FromBody] PreselectartistUpdateModel model)
+        public async Task<IActionResult> Actualizarpreselectset([FromBody] PreselectartistMassiveUpdateModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (model.id <= 0)
+            if (model.preselectid <= 0)
             {
                 return BadRequest();
             }
 
             var fechaHora = DateTime.Now;
-            var preselectartist = await _context.Preselectartists.FirstOrDefaultAsync(c => c.id == model.id);
+            var preselec = await _context.Preselects.FirstOrDefaultAsync(c => c.id == model.preselectid);
 
-            if (preselectartist == null)
+            if (preselec == null)
             {
                 return NotFound();
             }
 
-            preselectartist.preselectid = model.preselectid;
-            preselectartist.artistid = model.artistid;
-            preselectartist.iduserumod = model.iduserumod;
-            preselectartist.fecumod = fechaHora;
+            var activeids = await _context.Preselectartists.Where(f => model.preselectid == f.preselectid).ToListAsync();
+            int qty = 0;
+
+            for (var i = 0; i < model.artistid.Length; i++)
+            {
+                if (  !activeids.Exists( x => x.artistid == model.artistid[i]) ) 
+                {
+                    Preselectartist preselectartist = new Preselectartist
+                    {
+                        artistid = model.artistid[i],
+                        preselectid = model.preselectid,
+                        iduseralta = model.iduseralta,
+                        fecalta = fechaHora,
+                        iduserumod = model.iduseralta,
+                        fecumod = fechaHora,
+                        activo = true
+                    };
+                    _context.Preselectartists.Add(preselectartist);
+                    qty++;
+                }
+                if (qty > 0)
+                {
+                    preselec.iduserumod = model.iduseralta;
+                    preselec.fecumod = fechaHora;
+                }
+            }
 
             try
             {
@@ -146,7 +200,7 @@ namespace Sistema.Web.Controllers
                 return BadRequest();
             }
 
-            return Ok(preselectartist);
+            return Ok();
         }
 
         // POST: api/Preselectartists/Crearpreselectset

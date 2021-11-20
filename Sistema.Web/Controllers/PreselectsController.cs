@@ -28,7 +28,9 @@ namespace Sistema.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IEnumerable<PreselectViewModel>> Listar()
         {
-            var Checkin = await _context.Preselects.ToListAsync();
+            var Checkin = await _context.Preselects
+                .OrderByDescending(r => r.code)
+                .ToListAsync();
 
             return Checkin.Select(r => new PreselectViewModel
             {
